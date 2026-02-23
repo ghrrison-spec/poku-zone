@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>★ POKU.ZONE ★ HAVE YOU SEEN THIS BERA? ★</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Sixtyfour&family=VT323&family=Rubik+Bubbles&family=Special+Elite&family=Permanent+Marker&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --grey: #BABABA;
+      --black: #000000;
+      --white: #FFFFFF;
+      --yellow: #F3C734;
+      --blue: #2F63FA;
+      --green: #63DE77;
+      --paper: #f0e8d0;
+      --ink: #1a1208;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::-webkit-scrollbar { width: 14px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--yellow); border: 2px solid var(--black); }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23F3C734' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 12 12, auto;
+    }
+
+    body::before {
+      display: none;
+    }
+
+    /* ── Y2K CANVAS BG ── */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── FLOATING Y2K SHAPES ── */
+    .y2k-float {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      animation: y2k-drift linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes y2k-drift {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* flashing corner glows */
+    .corner-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      animation: glow-pulse 3s ease-in-out infinite alternate;
+    }
+    .corner-glow.tl { top: -80px;  left: -80px;  background: rgba(47,99,250,0.18); animation-delay: 0s; }
+    .corner-glow.tr { top: -80px;  right: -80px; background: rgba(243,199,52,0.14); animation-delay: 1s; }
+    .corner-glow.bl { bottom: -80px; left: -80px;  background: rgba(99,222,119,0.14); animation-delay: 0.5s; }
+    .corner-glow.br { bottom: -80px; right: -80px; background: rgba(47,99,250,0.12); animation-delay: 1.5s; }
+    @keyframes glow-pulse {
+      from { opacity: 0.5; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.3); }
+    }
+
+    /* scanline overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 17px;
+      padding: 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      border-top: 3px solid var(--black);
+      border-bottom: 3px solid var(--black);
+      position: relative;
+      z-index: 10;
+    }
+    .marquee-wrap span {
+      display: inline-block;
+      animation: marquee 28s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--black);
+      border-bottom: 4px solid var(--yellow);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: var(--yellow);
+      text-decoration: none;
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 15px;
+      border: 2px solid var(--yellow);
+      padding: 4px 12px;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    nav a:hover { background: var(--yellow); color: var(--black); transform: translateY(-2px); }
+
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .section-title {
+      font-family: 'Sixtyfour', monospace;
+      font-size: clamp(24px, 4vw, 46px);
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    /* ══════════════════════════════
+       HERO — MISSING POSTER
+    ══════════════════════════════ */
+    #hero { text-align: center; padding-top: 60px; padding-bottom: 40px; }
+
+    .missing-poster {
+      display: inline-grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      background: var(--paper);
+      color: var(--ink);
+      border: 6px solid var(--ink);
+      padding: 12px 14px;
+      width: min(300px, 82vw);
+      position: relative;
+      box-shadow: 8px 8px 0 rgba(0,0,0,0.6), 18px 18px 0 rgba(0,0,0,0.25);
+      transform: rotate(-0.8deg);
+    }
+
+    /* aged lines */
+    .missing-poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 29px, rgba(0,0,0,0.04) 30px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .poster-header {
+      font-family: 'Special Elite', serif;
+      font-size: clamp(38px, 10vw, 58px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      border-bottom: 4px solid var(--ink);
+      padding-bottom: 4px;
+      margin-bottom: 3px;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .poster-subheader {
+      font-family: 'Special Elite', serif;
+      font-size: clamp(9px, 2vw, 12px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 5px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .poster-img-wrap {
+      position: relative;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .poster-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border: 2px dashed rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    .poster-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(25%) contrast(1.08) sepia(10%);
+    }
+
+    .poster-name {
+      font-family: 'Special Elite', serif;
+      font-size: clamp(28px, 8vw, 40px);
+      font-weight: 900;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 4px 0 3px;
+      line-height: 1;
+    }
+
+    .poster-last-seen {
+      font-family: 'Special Elite', serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding: 3px 0;
+      margin-bottom: 6px;
+    }
+
+    .poster-reward {
+      font-family: 'Special Elite', serif;
+      font-size: clamp(12px, 3vw, 16px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 3px solid var(--ink);
+      padding: 4px 10px;
+      margin-top: 4px;
+      display: inline-block;
+      animation: blink-border 2s step-end infinite;
+    }
+    @keyframes blink-border { 0%, 100% { border-color: var(--ink); } 50% { border-color: rgba(0,0,0,0.15); } }
+
+    .poster-contact {
+      font-family: 'Special Elite', serif;
+      font-size: 9px;
+      letter-spacing: 0.8px;
+      color: var(--ink);
+      margin-top: 4px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      line-height: 1.5;
+    }
+
+    /* Staples */
+    .staple {
+      position: absolute;
+      width: 18px; height: 5px;
+      background: #9a9a9a;
+      border-radius: 1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+    .staple.tl { top: 14px; left: 18px; transform: rotate(-4deg); }
+    .staple.tr { top: 14px; right: 18px; transform: rotate(4deg); }
+    .staple.bl { bottom: 14px; left: 18px; transform: rotate(2deg); }
+    .staple.br { bottom: 14px; right: 18px; transform: rotate(-2deg); }
+
+    /* Tape */
+    .tape {
+      position: absolute;
+      background: rgba(255, 242, 170, 0.5);
+      border: 1px solid rgba(200,180,80,0.25);
+      z-index: 2;
+    }
+    .tape.top { top: -13px; left: 50%; transform: translateX(-50%) rotate(-1.5deg); width: 76px; height: 20px; }
+    .tape.bl2 { bottom: -11px; left: 18%; transform: rotate(2.5deg); width: 54px; height: 16px; }
+
+    /* ── UTILS ── */
+    .construction-banner {
+      background: repeating-linear-gradient(45deg, var(--yellow) 0px, var(--yellow) 20px, var(--black) 20px, var(--black) 40px);
+      padding: 12px;
+      text-align: center;
+      border-top: 4px solid var(--black);
+      border-bottom: 4px solid var(--black);
+    }
+    .construction-inner {
+      background: var(--black);
+      color: var(--yellow);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
+      padding: 10px 20px;
+      letter-spacing: 2px;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .emoji-row { text-align: center; font-size: 32px; margin: 20px 0; letter-spacing: 8px; animation: float 2s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    .divider { text-align: center; font-size: 24px; padding: 16px; letter-spacing: 12px; color: var(--grey); opacity: 0.35; }
+
+    .flash-label {
+      display: inline-block;
+      background: var(--blue);
+      color: var(--white);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 13px;
+      padding: 3px 10px;
+      letter-spacing: 1px;
+      animation: flash-bg 1.5s step-end infinite;
+    }
+    @keyframes flash-bg { 0%, 100% { background: var(--blue); } 50% { background: var(--green); color: var(--black); } }
+
+    .visitor-counter {
+      display: inline-block;
+      background: var(--black);
+      border: 3px solid var(--green);
+      color: var(--green);
+      font-family: 'VT323', monospace;
+      font-size: 28px;
+      padding: 6px 20px;
+      margin-top: 24px;
+      letter-spacing: 4px;
+    }
+
+    /* ── ABOUT ── */
+    .about-wrap {
+      background: rgba(47,99,250,0.08);
+      border-top: 3px solid var(--blue);
+      border-bottom: 3px solid var(--blue);
+      position: relative;
+      z-index: 1;
+    }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    @media (max-width: 600px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .about-img { width: 100%; height: 280px; object-fit: cover; border: 4px solid var(--white); outline: 4px solid var(--blue); outline-offset: 3px; display: block; }
+
+    .about-text p { font-family: 'VT323', monospace; font-size: 22px; line-height: 1.5; color: var(--white); margin-bottom: 16px; }
+    .stat { color: var(--yellow); font-family: 'Black Han Sans', sans-serif; font-size: 17px; margin-bottom: 8px; display: flex; gap: 12px; }
+    .stat span:first-child { color: var(--green); min-width: 130px; }
+
+    /* ── GALLERY ── */
+    #gallery { padding-top: 80px; padding-bottom: 80px; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .gallery-item { position: relative; overflow: hidden; border: 4px solid var(--grey); transition: all 0.2s; aspect-ratio: 1; background: #111; }
+    .gallery-item:hover { border-color: var(--yellow); transform: scale(1.04) rotate(1deg); z-index: 5; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-item .img-placeholder { width: 100%; height: 100%; font-size: 40px; }
+    .img-placeholder { background: linear-gradient(135deg,#111 0%,#1a1a2e 50%,#111 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .img-placeholder span { font-family: 'VT323', monospace; font-size: 18px; color: var(--grey); }
+    .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: var(--yellow); font-family: 'VT323', monospace; font-size: 18px; padding: 6px 10px; transform: translateY(100%); transition: transform 0.2s; }
+    .gallery-item:hover .gallery-caption { transform: translateY(0); }
+
+    /* ── LORE ── */
+    .lore-wrap { background: rgba(99,222,119,0.05); border-top: 3px solid var(--green); border-bottom: 3px solid var(--green); position: relative; z-index: 1; }
+    .lore-block { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 48px; align-items: center; }
+    .lore-block.reverse { direction: rtl; }
+    .lore-block.reverse > * { direction: ltr; }
+    @media (max-width: 600px) { .lore-block, .lore-block.reverse { grid-template-columns: 1fr; direction: ltr; } }
+    .lore-img-ph { width: 100%; height: 240px; background: linear-gradient(135deg,#111,#1a1a2e,#111); border: 4px solid var(--green); outline: 4px solid var(--black); outline-offset: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 50px; }
+    .lore-img-ph span { font-family: 'VT323', monospace; font-size: 18px; color: var(--grey); }
+    .lore-text h3 { font-family: 'Rubik Bubbles', cursive; font-size: 28px; color: var(--yellow); margin-bottom: 12px; }
+    .lore-text p { font-family: 'VT323', monospace; font-size: 21px; line-height: 1.5; color: var(--white); }
+
+    /* ── GUESTBOOK ── */
+    #guestbook { padding-top: 80px; padding-bottom: 80px; }
+    .guestbook-entries { margin-bottom: 40px; }
+    .guest-entry { border: 2px solid var(--grey); padding: 16px 20px; margin-bottom: 12px; background: rgba(255,255,255,0.03); transition: border-color 0.2s; }
+    .guest-entry:hover { border-color: var(--yellow); }
+    .guest-name { font-family: 'Black Han Sans', sans-serif; font-size: 18px; color: var(--yellow); margin-bottom: 4px; }
+    .guest-date { font-size: 16px; color: var(--grey); margin-bottom: 8px; }
+    .guest-msg { font-family: 'VT323', monospace; font-size: 20px; color: var(--white); }
+    .guestbook-form { border: 3px solid var(--yellow); padding: 28px; background: rgba(243,199,52,0.05); }
+    .guestbook-form h3 { font-family: 'Black Han Sans', sans-serif; font-size: 22px; color: var(--yellow); margin-bottom: 20px; }
+    .form-row { margin-bottom: 16px; }
+    .form-row label { display: block; font-family: 'VT323', monospace; font-size: 20px; color: var(--grey); margin-bottom: 6px; }
+    .form-row input, .form-row textarea { width: 100%; background: var(--black); border: 2px solid var(--grey); color: var(--white); font-family: 'VT323', monospace; font-size: 20px; padding: 8px 12px; outline: none; transition: border-color 0.2s; }
+    .form-row input:focus, .form-row textarea:focus { border-color: var(--yellow); }
+    .form-row textarea { height: 100px; resize: vertical; }
+    .btn-submit { background: var(--yellow); color: var(--black); border: 3px solid var(--black); font-family: 'Black Han Sans', sans-serif; font-size: 18px; padding: 10px 32px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.15s; }
+    .btn-submit:hover { background: var(--green); transform: translateY(-2px); }
+
+    /* ── MUSIC PLAYER ── */
+    .music-player { position: fixed; bottom: 20px; right: 20px; background: var(--black); border: 3px solid var(--yellow); padding: 14px 18px; z-index: 999; min-width: 260px; box-shadow: 6px 6px 0 var(--yellow); transition: transform 0.3s; }
+    .music-title { font-family: 'Black Han Sans', sans-serif; font-size: 13px; color: var(--yellow); letter-spacing: 2px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .music-title button { background: none; border: none; color: var(--grey); cursor: pointer; font-size: 16px; }
+    .now-playing { font-family: 'VT323', monospace; font-size: 18px; color: var(--white); white-space: nowrap; overflow: hidden; margin-bottom: 10px; }
+    .now-playing span { display: inline-block; animation: marquee 10s linear infinite; }
+    .player-controls { display: flex; gap: 8px; align-items: center; }
+    .player-controls button { background: var(--black); border: 2px solid var(--grey); color: var(--white); font-family: 'VT323', monospace; font-size: 18px; padding: 2px 10px; cursor: pointer; transition: all 0.15s; }
+    .player-controls button:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+    audio { display: none; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); border-top: 4px solid var(--yellow); text-align: center; padding: 40px 24px; position: relative; z-index: 1; }
+    .footer-badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .badge { border: 2px solid var(--grey); padding: 4px 10px; font-family: 'VT323', monospace; font-size: 16px; color: var(--grey); transition: all 0.15s; }
+    .badge:hover { border-color: var(--yellow); color: var(--yellow); }
+    .footer-title { font-family: 'Sixtyfour', monospace; font-size: 28px; color: var(--yellow); margin-bottom: 16px; }
+    .footer-text { font-family: 'VT323', monospace; font-size: 18px; color: var(--grey); line-height: 1.8; }
+
+    /* ── GREETER POKU ── */
+    .greeter {
+      position: fixed;
+      left: 16px;
+      bottom: 20px;
+      z-index: 998;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      pointer-events: none;
+    }
+
+    .greeter-bubbles {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .henlo-bubble {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Permanent Marker', cursive;
+      font-size: 15px;
+      padding: 5px 12px;
+      border: 2px solid var(--black);
+      border-radius: 14px 14px 14px 2px;
+      position: relative;
+      white-space: nowrap;
+      box-shadow: 2px 2px 0 var(--black);
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .henlo-bubble.b1 { animation: pop-in 0.3s ease forwards 0.6s, bob 2.5s ease-in-out infinite 1s; font-size: 13px; }
+    .henlo-bubble.b2 { animation: pop-in 0.3s ease forwards 1.0s, bob 2.5s ease-in-out infinite 1.3s; font-size: 15px; }
+    .henlo-bubble.b3 { animation: pop-in 0.3s ease forwards 1.4s, bob 2.5s ease-in-out infinite 1.6s; font-size: 18px; background: var(--yellow); }
+
+    @keyframes pop-in {
+      from { opacity: 0; transform: translateX(-12px) scale(0.8); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-4px); }
+    }
+
+    .greeter-img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      animation: greeter-float 3s ease-in-out infinite;
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6));
+    }
+    @keyframes greeter-float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    @media (max-width: 600px) {
+      .greeter { left: 8px; bottom: 90px; }
+      .greeter-img { width: 68px; height: 68px; }
+      .henlo-bubble { font-size: 12px; padding: 4px 9px; }
+    }
+
+    /* ── SECRET ── */
+    #secret-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+    #secret-overlay.show { display: flex; }
+    #secret-overlay h2 { font-family: 'Sixtyfour', monospace; font-size: clamp(28px, 5vw, 60px); color: var(--yellow); animation: wobble 0.5s ease-in-out infinite; margin-bottom: 20px; }
+    @keyframes wobble { 0%,100% { transform: rotate(-1deg) scale(1); } 50% { transform: rotate(1deg) scale(1.03); } }
+    #secret-overlay p { font-family: 'VT323', monospace; font-size: 28px; color: var(--green); line-height: 1.8; }
+    #secret-overlay button { margin-top: 32px; background: var(--yellow); color: var(--black); border: 3px solid var(--black); font-family: 'Black Han Sans', sans-serif; font-size: 18px; padding: 10px 32px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ Y2K BACKGROUND ═══ -->
+<canvas id="bg-canvas"></canvas>
+<div class="corner-glow tl"></div>
+<div class="corner-glow tr"></div>
+<div class="corner-glow bl"></div>
+<div class="corner-glow br"></div>
+<div class="scanlines"></div>
+<div id="floaters"></div>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-wrap">
+  <span>🐾 HAVE YOU SEEN THIS BERA? ★ POKU WAS LAST SEEN IN LATE 2025 ★ IF FOUND PLEASE DO NOT APPROACH ★ POKU IS CONSIDERED EXTREMELY CUTE AND POSSIBLY HUNGRY ★ REWARD OFFERED ★ HENLO, AND FURTHERMORE, OOGA BOOGA ★ POKU IS MISSING BUT NOT FORGOTTEN ★ SAY HENLO BACK ★ EYES DESCRIBED AS "BIG, DARK, UNFORGETTABLE" ★ POKU DOES NOT NEGOTIATE ★ 🐾 </span>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="#hero">🏠 HOME</a>
+  <a href="#about">👁️ WHO IS POKU</a>
+  <a href="#gallery">🖼️ GALLERY</a>
+  <a href="#lore">📜 LORE</a>
+  <a href="#sighting">📋 SIGHTING REPORT</a>
+</nav>
+
+<!-- ═══ HERO — MISSING POSTER ═══ -->
+<section id="hero">
+  <div class="emoji-row">🔍 📰 🐾 📌 🔎 📋 🐻 📍</div>
+
+  <div class="missing-poster">
+    <div class="tape top"></div>
+    <div class="tape bl2"></div>
+    <div class="staple tl"></div>
+    <div class="staple tr"></div>
+    <div class="staple bl"></div>
+    <div class="staple br"></div>
+
+    <div class="poster-header">MISSING</div>
+    <div class="poster-subheader">⚠ Have You Seen This Bera? ⚠</div>
+
+    <div class="poster-img-wrap">
+      <img src="poku.png" alt="Poku - Missing Bera" class="poster-img"/>
+    </div>
+
+    <div class="poster-name">POKU</div>
+    <div class="poster-last-seen">Last seen: Late 2025 &nbsp;|&nbsp; Location: Unknown</div>
+    <div class="poster-reward">⚠ REWARD OFFERED ⚠</div>
+    <div class="poster-contact">If found, say henlo back. Do not make sudden movements.</div>
+  </div>
+
+  <div>
+    <div class="visitor-counter">👁 WITNESSES: <span id="visit-num">001337</span></div>
+  </div>
+
+  <div style="margin-top: 28px; font-family: 'VT323', monospace; font-size: 22px; color: var(--grey);">
+    <span class="flash-label">OOGA BOOGA</span> &nbsp; Try the Konami Code if you know where Poku is 👀
+  </div>
+</section>
+
+<div class="construction-banner">
+  <div class="construction-inner">🚧 &nbsp; THIS PAGE IS ETERNALLY UNDER CONSTRUCTION (LIKE THE SEARCH FOR POKU) &nbsp; 🚧</div>
+</div>
+
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="about-wrap">
+  <section id="about">
+    <div class="section-title" style="color: var(--blue);">👁️ WHO IS POKU? 👁️</div>
+    <div class="about-grid">
+      <div>
+        <img src="poku.png" alt="Poku" class="about-img"/>
+      </div>
+      <div class="about-text">
+        <p>Poku is a small, soft, deeply mysterious purple bear of unclear origin and unknowable motivations.</p>
+        <p>Nobody taught Poku how to say hello. It came out as henlo. Poku did not correct it. The internet agreed this was correct.</p>
+        <p>Poku's job title has never been confirmed. Poku's schedule is unknown. Poku shows up when needed and disappears before questions can be asked.</p>
+        <div style="margin-top: 24px;">
+          <div class="stat"><span>SPECIES:</span> <span>Bear (probably)</span></div>
+          <div class="stat"><span>COLOUR:</span> <span>Deep purple. Mysterious.</span></div>
+          <div class="stat"><span>EYES:</span> <span style="color: var(--yellow);">Enormous. Haunting. Cute.</span></div>
+          <div class="stat"><span>HOBBIES:</span> <span>Wandering. Vibing. Seeding.</span></div>
+          <div class="stat"><span>THREAT LEVEL:</span> <span style="color: var(--green);">Maximum Cute 🐾</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<!-- ═══ GALLERY ═══ -->
+<section id="gallery">
+  <div class="section-title" style="color: var(--green);">🖼️ THE GALLERY OF POKU 🖼️</div>
+  <div style="text-align: center; margin-bottom: 32px; font-family: 'VT323', monospace; font-size: 20px; color: var(--grey);">
+    Documented sightings. Hover to reveal context. 🐾
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="poku.png" alt="Poku"/>
+      <div class="gallery-caption">The Last Known Photo</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-flamethrower.png" alt="Poku with flamethrower"/>
+      <div class="gallery-caption">Poku, Armed & Smiling</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-helmet.png" alt="Poku in helmet"/>
+      <div class="gallery-caption">Poku Says Henlo</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-firehead.png" alt="Poku on fire"/>
+      <div class="gallery-caption">Poku Got Lit</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-fireeyes.png" alt="Poku fire eyes"/>
+      <div class="gallery-caption">Poku Has Seen Things</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-matches.png" alt="Poku with matches"/>
+      <div class="gallery-caption">Poku, Innocent Bystander</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-chef.png" alt="Poku chef"/>
+      <div class="gallery-caption">Poku Cooks (Literally)</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-sitting-fire.png" alt="Poku sitting in fire"/>
+      <div class="gallery-caption">Poku, Unbothered</div>
+    </div>
+    <div class="gallery-item">
+      <img src="poku-briefcase.png" alt="Poku with briefcase"/>
+      <div class="gallery-caption">Poku Has Something For You</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<!-- ═══ LORE ═══ -->
+<div class="lore-wrap">
+  <section id="lore">
+    <div class="section-title" style="color: var(--green);">📜 THE SACRED LORE 📜</div>
+
+    <div class="lore-block">
+      <div class="lore-img-ph" style="padding: 0; overflow: hidden; font-size: unset;">
+        <img src="poku-wave.png" alt="Poku waving" style="width:100%; height:240px; object-fit:cover; display:block;"/>
+      </div>
+      <div class="lore-text">
+        <h3>Chapter I: The First Henlo</h3>
+        <p>It tried to say hello. It came out as henlo. Poku did not apologise. The internet decided this was correct. A greeting was born. A cult followed shortly after, mostly because nobody could stop saying it back.</p>
+      </div>
+    </div>
+
+    <div class="lore-block reverse">
+      <div class="lore-img-ph" style="padding: 0; overflow: hidden; font-size: unset;">
+        <img src="poku-flamethrower.png" alt="Poku with flamethrower" style="width:100%; height:240px; object-fit:cover; display:block;"/>
+      </div>
+      <div class="lore-text">
+        <h3>Chapter II: The Wander</h3>
+        <p>Poku roamed. Poku seeded. Poku carried a bag and occasionally a flamethrower. Nobody asked about the flamethrower. This was considered the correct response. Poku's silence on the matter remains canon.</p>
+      </div>
+    </div>
+
+    <div class="lore-block">
+      <div class="lore-img-ph" style="padding: 0; overflow: hidden; font-size: unset;">
+        <img src="poku-sitting-fire.png" alt="Poku sitting in fire" style="width:100%; height:240px; object-fit:cover; display:block;"/>
+      </div>
+      <div class="lore-text">
+        <h3>Chapter III: Ooga Booga</h3>
+        <p>The community found each other. Art was made. Sites were built. People said henlo to complete strangers and felt something. Poku nodded once, sat down in some fire, and disappeared into late 2025. This page is the evidence.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<!-- ═══ SIGHTING REPORT ═══ -->
+<section id="sighting">
+  <div class="section-title" style="color: var(--yellow);">📋 SIGHTING REPORT 📋</div>
+  <div style="text-align: center; margin-bottom: 32px; font-family: 'VT323', monospace; font-size: 20px; color: var(--grey);">
+    Have you seen Poku? File your report below. All sightings taken seriously. Probably.
+  </div>
+
+  <div class="guestbook-entries" id="guestbook-entries">
+  </div>
+
+  <div class="guestbook-form">
+    <h3>✍️ File Your Sighting</h3>
+    <div class="form-row">
+      <label>YOUR NAME (or alias):</label>
+      <input type="text" id="gb-name" placeholder="e.g. henlo_enjoyor" maxlength="40"/>
+    </div>
+    <div class="form-row">
+      <label>YOUR REPORT:</label>
+      <textarea id="gb-msg" placeholder="henlo, and furthermore..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="signGuestbook()">📨 SUBMIT REPORT</button>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-title">POKU.ZONE</div>
+  <div class="footer-badges">
+    <div class="badge">🌐 Made With Notepad</div>
+    <div class="badge">💾 Best in IE 4.0</div>
+    <div class="badge">🚀 Netscape Ready</div>
+    <div class="badge">✅ Y2K Compliant</div>
+    <div class="badge">⚡ No Frames!</div>
+    <div class="badge">🐾 Poku Approved</div>
+  </div>
+  <div class="footer-text">
+    🌐 POKU.ZONE — THE OFFICIAL HOME OF POKU 🌐<br/>
+    ★ IF FOUND PLEASE SAY HENLO BACK ★<br/>
+    ⚡ POKU WAS LAST SEEN IN LATE 2025 ⚡<br/>
+    🐾 DO NOT MAKE SUDDEN MOVEMENTS 🐾<br/><br/>
+    <span style="color: var(--grey); font-size: 16px;">Hint: Try the Konami Code ↑↑↓↓←→←→BA</span>
+  </div>
+</footer>
+
+<!-- ═══ GREETER POKU ═══ -->
+<div class="greeter">
+  <div class="greeter-bubbles">
+    <div class="henlo-bubble b1">henlo...</div>
+    <div class="henlo-bubble b2">henlo!</div>
+    <div class="henlo-bubble b3">HENLO!! 🐾</div>
+  </div>
+  <img src="poku-wave.png" alt="Poku says henlo" class="greeter-img"/>
+</div>
+
+<!-- ═══ MUSIC PLAYER ═══ -->
+<div class="music-player" id="music-player">
+  <div class="music-title">
+    🎵 POKU FM
+    <button onclick="togglePlayer()" title="Minimize">✕</button>
+  </div>
+  <div class="now-playing"><span id="track-name">♪ henlo.mp3 — say it back ♪</span></div>
+  <div class="player-controls">
+    <button onclick="togglePlay()" id="play-btn">▶ PLAY</button>
+    <button onclick="toggleMute()" id="mute-btn">🔊</button>
+  </div>
+  <audio id="audio-player" loop>
+    <source src="henlo.mp3" type="audio/mpeg"/>
+  </audio>
+</div>
+
+<!-- ═══ SECRET OVERLAY ═══ -->
+<div id="secret-overlay">
+  <h2>🐾 OOGA BOOGA 🐾</h2>
+  <p>HENLO, AND FURTHERMORE...<br/>U FOUND THE SECRET.<br/>ARE U EVEN SEEDING?<br/>FUR IN THE GAME.<br/><br/>POKU WAS LAST SEEN HERE.</p>
+  <button onclick="document.getElementById('secret-overlay').classList.remove('show')">✨ HENLO ✨</button>
+</div>
+
+<script>
+  // ── VISITOR COUNTER ──
+  const visits = parseInt(localStorage.getItem('poku_visits') || '1337') + 1;
+  localStorage.setItem('poku_visits', visits);
+  document.getElementById('visit-num').textContent = String(visits).padStart(6, '0');
+
+  // ── GUESTBOOK ──
+  function signGuestbook() {
+    const name = document.getElementById('gb-name').value.trim();
+    const msg  = document.getElementById('gb-msg').value.trim();
+    if (!name || !msg) { alert('Poku demands both a name AND a message.'); return; }
+    const now = new Date();
+    const date = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+    const emojis = ['⚡','🌟','👾','🐾','✨','🔥','💫','🌙'];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    const entry = document.createElement('div');
+    entry.className = 'guest-entry';
+    entry.innerHTML = `
+      <div class="guest-name">${escHtml(name)} ${emoji}</div>
+      <div class="guest-date">📅 ${date}</div>
+      <div class="guest-msg">${escHtml(msg)}</div>`;
+    document.getElementById('guestbook-entries').prepend(entry);
+    document.getElementById('gb-name').value = '';
+    document.getElementById('gb-msg').value = '';
+    entry.style.border = '2px solid var(--yellow)';
+    setTimeout(() => entry.style.border = '2px solid var(--grey)', 2000);
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── MUSIC PLAYER ──
+  const audio = document.getElementById('audio-player');
+  let playing = false, muted = false, playerVisible = true;
+
+  function togglePlay() {
+    if (playing) { audio.pause(); document.getElementById('play-btn').textContent = '▶ PLAY'; }
+    else { audio.play().catch(() => {}); document.getElementById('play-btn').textContent = '⏸ PAUSE'; }
+    playing = !playing;
+  }
+  function toggleMute() {
+    muted = !muted; audio.muted = muted;
+    document.getElementById('mute-btn').textContent = muted ? '🔇' : '🔊';
+  }
+  function togglePlayer() {
+    playerVisible = !playerVisible;
+    document.getElementById('music-player').style.transform = playerVisible ? 'none' : 'translateX(calc(100% + 25px))';
+  }
+
+  window.addEventListener('load', () => {
+    audio.play().then(() => { playing = true; document.getElementById('play-btn').textContent = '⏸ PAUSE'; }).catch(() => {});
+  });
+
+  // ── Y2K BACKGROUND CANVAS ──
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#F3C734','#2F63FA','#63DE77','#BABABA','#FFFFFF'];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Stars / sparkles
+  const stars = Array.from({length: 120}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 2 + 0.5,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    speed: Math.random() * 0.4 + 0.1,
+    phase: Math.random() * Math.PI * 2,
+    blinkSpeed: Math.random() * 0.04 + 0.01,
+  }));
+
+  // Grid lines (moving)
+  let gridOffset = 0;
+
+  // Trailing meteors
+  const meteors = Array.from({length: 6}, () => spawnMeteor());
+  function spawnMeteor() {
+    return {
+      x: Math.random() * window.innerWidth * 1.5,
+      y: -20,
+      vx: -(Math.random() * 2 + 1),
+      vy: Math.random() * 3 + 2,
+      len: Math.random() * 80 + 40,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: Math.random() * 0.6 + 0.3,
+    };
+  }
+
+  // Spinning diamond shapes
+  const diamonds = Array.from({length: 12}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: Math.random() * 12 + 4,
+    angle: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.04,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    alpha: Math.random() * 0.5 + 0.15,
+  }));
+
+  // Plus signs floating
+  const plusses = Array.from({length: 18}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: Math.random() * 10 + 5,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    alpha: Math.random() * 0.4 + 0.1,
+    blink: Math.random() * Math.PI * 2,
+    blinkS: Math.random() * 0.03 + 0.01,
+  }));
+
+  function drawDiamond(ctx, x, y, size, angle, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(0, size);
+    ctx.lineTo(-size, 0);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPlus(ctx, x, y, size, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x - size, y); ctx.lineTo(x + size, y);
+    ctx.moveTo(x, y - size); ctx.lineTo(x, y + size);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawStar4(ctx, x, y, size, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2;
+      const b = a + Math.PI / 4;
+      ctx.lineTo(x + Math.cos(a) * size, y + Math.sin(a) * size);
+      ctx.lineTo(x + Math.cos(b) * (size * 0.35), y + Math.sin(b) * (size * 0.35));
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  let t = 0;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t += 0.016;
+    gridOffset = (gridOffset + 0.3) % 60;
+
+    // Subtle moving grid
+    ctx.save();
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#2F63FA';
+    ctx.lineWidth = 1;
+    for (let x = (gridOffset % 60); x < canvas.width; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += 60) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Stars blinking
+    stars.forEach(s => {
+      s.phase += s.blinkSpeed;
+      const a = (Math.sin(s.phase) * 0.5 + 0.5) * 0.8 + 0.1;
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      // Drift slightly
+      s.x += (Math.sin(s.phase * 0.3) * 0.1);
+    });
+
+    // 4-point star sparkles
+    stars.filter((_, i) => i % 8 === 0).forEach(s => {
+      const a = (Math.sin(s.phase + 1) * 0.5 + 0.5) * 0.6;
+      drawStar4(ctx, s.x, s.y, s.r * 3, s.color, a);
+    });
+
+    // Meteors
+    meteors.forEach((m, i) => {
+      ctx.save();
+      ctx.globalAlpha = m.alpha;
+      const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * m.len, m.y - m.vy * m.len);
+      grad.addColorStop(0, m.color);
+      grad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.vx * (m.len / Math.hypot(m.vx, m.vy)),
+                 m.y - m.vy * (m.len / Math.hypot(m.vx, m.vy)));
+      ctx.stroke();
+      ctx.restore();
+      m.x += m.vx; m.y += m.vy;
+      if (m.y > canvas.height + 40 || m.x < -100) meteors[i] = spawnMeteor();
+    });
+
+    // Diamonds
+    diamonds.forEach(d => {
+      d.angle += d.rotSpeed;
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < -20) d.x = canvas.width + 20;
+      if (d.x > canvas.width + 20) d.x = -20;
+      if (d.y < -20) d.y = canvas.height + 20;
+      if (d.y > canvas.height + 20) d.y = -20;
+      drawDiamond(ctx, d.x, d.y, d.size, d.angle, d.color, d.alpha);
+    });
+
+    // Plusses blinking
+    plusses.forEach(p => {
+      p.blink += p.blinkS;
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -20) p.x = canvas.width + 20;
+      if (p.x > canvas.width + 20) p.x = -20;
+      if (p.y < -20) p.y = canvas.height + 20;
+      if (p.y > canvas.height + 20) p.y = -20;
+      const a = (Math.sin(p.blink) * 0.5 + 0.5) * p.alpha + 0.05;
+      drawPlus(ctx, p.x, p.y, p.size, p.color, a);
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+  const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIdx = 0;
+  document.addEventListener('keydown', (e) => {
+    konamiIdx = (e.key === konamiSeq[konamiIdx]) ? konamiIdx + 1 : 0;
+    if (konamiIdx === konamiSeq.length) {
+      document.getElementById('secret-overlay').classList.add('show');
+      konamiIdx = 0;
+    }
+  });
+</script>
+</body>
+</html>
