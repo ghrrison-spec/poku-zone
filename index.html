@@ -1265,8 +1265,31 @@
     document.getElementById('music-player').style.transform = playerVisible ? 'none' : 'translateX(calc(100% + 25px))';
   }
 
+  // Autoplay on first user interaction (browsers block autoplay before that)
+  function tryAutoplay() {
+    if (!playing) {
+      audio.play().then(() => {
+        playing = true;
+        document.getElementById('play-btn').textContent = '⏸ PAUSE';
+      }).catch(() => {});
+    }
+    document.removeEventListener('click', tryAutoplay);
+    document.removeEventListener('keydown', tryAutoplay);
+    document.removeEventListener('scroll', tryAutoplay);
+    document.removeEventListener('touchstart', tryAutoplay);
+  }
+  // Also try immediately on load (works if browser allows it)
   window.addEventListener('load', () => {
-    audio.play().then(() => { playing = true; document.getElementById('play-btn').textContent = '⏸ PAUSE'; }).catch(() => {});
+    audio.play().then(() => {
+      playing = true;
+      document.getElementById('play-btn').textContent = '⏸ PAUSE';
+    }).catch(() => {
+      // Blocked — wait for first interaction instead
+      document.addEventListener('click', tryAutoplay);
+      document.addEventListener('keydown', tryAutoplay);
+      document.addEventListener('scroll', tryAutoplay);
+      document.addEventListener('touchstart', tryAutoplay);
+    });
   });
 
   // ── Y2K BACKGROUND CANVAS ──
