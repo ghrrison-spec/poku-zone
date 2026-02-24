@@ -427,6 +427,354 @@
     .footer-title { font-family: 'Sixtyfour', monospace; font-size: 28px; color: var(--yellow); margin-bottom: 16px; }
     .footer-text { font-family: 'VT323', monospace; font-size: 18px; color: var(--grey); line-height: 1.8; }
 
+    /* ── FIND POKU GAME ── */
+    #game { text-align: center; }
+
+    .game-hud {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      font-family: 'VT323', monospace;
+      font-size: 26px;
+    }
+    .game-hud-box {
+      border: 3px solid var(--yellow);
+      padding: 6px 20px;
+      background: rgba(243,199,52,0.08);
+      letter-spacing: 2px;
+    }
+    .game-hud-box span { color: var(--yellow); }
+
+    .game-instructions {
+      font-family: 'Special Elite', serif;
+      font-size: 14px;
+      color: var(--grey);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .game-target-wrap {
+      display: inline-block;
+      margin-bottom: 24px;
+      padding: 10px 20px;
+      border: 3px solid var(--green);
+      background: rgba(99,222,119,0.07);
+      font-family: 'Special Elite', serif;
+      font-size: 13px;
+      color: var(--green);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .game-target-wrap img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      display: block;
+      margin: 8px auto 0;
+      border: 2px solid var(--green);
+      background: #1a1a2e;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--game-cols, 3), 1fr);
+      gap: 10px;
+      max-width: 700px;
+      margin: 0 auto 24px;
+    }
+
+    .game-card {
+      cursor: pointer;
+      border: 3px solid #444;
+      background: #111;
+      padding: 8px;
+      transition: transform 0.1s, border-color 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+    .game-card:hover { border-color: var(--yellow); transform: scale(1.04); }
+    .game-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      display: block;
+      background: #1a1a2e;
+      pointer-events: none;
+    }
+    .game-card.correct {
+      border-color: var(--green) !important;
+      animation: correct-flash 0.4s ease;
+    }
+    .game-card.wrong {
+      border-color: #ff4444 !important;
+      animation: wrong-shake 0.35s ease;
+    }
+    @keyframes correct-flash {
+      0%,100% { background: #111; }
+      50% { background: rgba(99,222,119,0.3); }
+    }
+    @keyframes wrong-shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .game-card .card-label {
+      font-family: 'VT323', monospace;
+      font-size: 13px;
+      color: #555;
+      text-align: center;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .game-feedback {
+      font-family: 'Sixtyfour', monospace;
+      font-size: clamp(18px, 4vw, 32px);
+      min-height: 48px;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .game-feedback.good { color: var(--green); }
+    .game-feedback.bad  { color: #ff4444; }
+
+    .game-btn {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 12px 32px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.1s;
+      display: none;
+    }
+    .game-btn:hover { transform: scale(1.05); }
+    .game-btn.visible { display: inline-block; }
+
+    .game-over-screen {
+      display: none;
+      font-family: 'Special Elite', serif;
+      padding: 32px;
+      border: 4px solid var(--yellow);
+      background: rgba(0,0,0,0.8);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .game-over-screen.visible { display: block; }
+    .game-over-screen h2 {
+      font-family: 'Sixtyfour', monospace;
+      font-size: clamp(22px, 5vw, 36px);
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+    .game-over-screen p { font-size: 16px; color: var(--grey); margin-bottom: 8px; }
+    .game-over-screen .final-score {
+      font-size: clamp(28px, 6vw, 52px);
+      color: var(--green);
+      font-family: 'VT323', monospace;
+      letter-spacing: 4px;
+      margin: 16px 0;
+    }
+
+    .round-banner {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(13px, 2.5vw, 18px);
+      letter-spacing: 3px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .round-banner span { color: var(--yellow); }
+
+    /* ── JACKPOT OVERLAY ── */
+    #jackpot-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      overflow: hidden;
+      animation: jp-bg-flash 0.4s step-end infinite;
+    }
+    #jackpot-overlay.active { display: flex; align-items: center; justify-content: center; }
+
+    @keyframes jp-bg-flash {
+      0%,100% { background: rgba(0,0,0,0.92); }
+      50%      { background: rgba(10,10,30,0.96); }
+    }
+
+    /* Coin rain */
+    #jackpot-coins { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .jp-coin {
+      position: absolute;
+      top: -60px;
+      animation: coin-fall linear infinite;
+      user-select: none;
+      filter: drop-shadow(0 0 6px #F3C734);
+    }
+    @keyframes coin-fall {
+      0%   { top: -60px; opacity: 1; transform: rotate(0deg) scale(1); }
+      80%  { opacity: 1; }
+      100% { top: 110vh; opacity: 0; transform: rotate(720deg) scale(0.6); }
+    }
+
+    /* Border lights */
+    .jp-lights-row {
+      position: absolute;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 8px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .jp-lights-row.top { top: 8px; }
+    .jp-lights-row.bottom { bottom: 8px; }
+    .jp-lights-col {
+      position: absolute;
+      top: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .jp-lights-col.left { left: 8px; }
+    .jp-lights-col.right { right: 8px; }
+    .jp-light {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #111;
+      box-shadow: 0 0 8px currentColor;
+      transition: background 0.05s;
+      flex-shrink: 0;
+    }
+
+    /* Main content box */
+    .jp-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      border: 6px solid var(--yellow);
+      background: #0a0a0a;
+      padding: 32px 40px 28px;
+      max-width: min(520px, 90vw);
+      box-shadow: 0 0 60px var(--yellow), 0 0 120px rgba(243,199,52,0.3);
+      animation: jp-border-glow 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes jp-border-glow {
+      from { box-shadow: 0 0 40px var(--yellow), 0 0 80px rgba(243,199,52,0.2); }
+      to   { box-shadow: 0 0 80px var(--yellow), 0 0 160px rgba(243,199,52,0.5), 0 0 8px #fff; }
+    }
+
+    .jp-title {
+      font-family: 'Sixtyfour', monospace;
+      font-size: clamp(32px, 8vw, 58px);
+      color: var(--yellow);
+      letter-spacing: 4px;
+      animation: jp-title-flash 0.3s step-end infinite;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    @keyframes jp-title-flash {
+      0%,60%,100% { color: var(--yellow); text-shadow: 0 0 20px var(--yellow); }
+      30%          { color: #fff; text-shadow: 0 0 30px #fff; }
+    }
+
+    .jp-subtitle {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(13px, 3vw, 18px);
+      color: var(--green);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      animation: jp-subtitle-flash 0.5s step-end infinite;
+    }
+    @keyframes jp-subtitle-flash {
+      0%,100% { color: var(--green); }
+      50%     { color: var(--blue); }
+    }
+
+    .jp-poku {
+      width: min(140px, 35vw);
+      height: min(140px, 35vw);
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
+      animation: jp-poku-bounce 0.5s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 16px var(--yellow));
+    }
+    @keyframes jp-poku-bounce {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-12px) scale(1.06) rotate(3deg); }
+    }
+
+    .jp-banner {
+      font-family: 'Special Elite', serif;
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: var(--white);
+      letter-spacing: 2px;
+      border-top: 2px solid var(--yellow);
+      border-bottom: 2px solid var(--yellow);
+      padding: 6px 0;
+      margin-bottom: 12px;
+      animation: jp-banner-scroll 0.8s step-end infinite;
+    }
+    @keyframes jp-banner-scroll {
+      0%,100% { background: transparent; color: var(--white); }
+      50%     { background: var(--yellow); color: var(--black); }
+    }
+
+    .jp-score {
+      font-family: 'VT323', monospace;
+      font-size: clamp(42px, 10vw, 72px);
+      color: var(--yellow);
+      letter-spacing: 6px;
+      line-height: 1;
+      text-shadow: 0 0 20px var(--yellow);
+      margin-bottom: 4px;
+    }
+
+    .jp-rank {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(13px, 3vw, 18px);
+      color: var(--green);
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .jp-msg {
+      font-family: 'Special Elite', serif;
+      font-size: 13px;
+      color: var(--grey);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .jp-btn {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      cursor: pointer;
+      text-transform: uppercase;
+      animation: jp-btn-pulse 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes jp-btn-pulse {
+      from { transform: scale(1);    box-shadow: 0 0 10px var(--yellow); }
+      to   { transform: scale(1.05); box-shadow: 0 0 30px var(--yellow); }
+    }
+
     /* ── GREETER POKU ── */
     .greeter {
       position: fixed;
@@ -525,6 +873,7 @@
   <a href="#about">👁️ WHO IS POKU</a>
   <a href="#gallery">🖼️ GALLERY</a>
   <a href="#lore">📜 LORE</a>
+  <a href="#game">🎮 FIND POKU</a>
   <a href="#sighting">📋 SIGHTING REPORT</a>
 </nav>
 
@@ -565,6 +914,44 @@
 <div class="construction-banner">
   <div class="construction-inner">🚧 &nbsp; THIS PAGE IS ETERNALLY UNDER CONSTRUCTION (LIKE THE SEARCH FOR POKU) &nbsp; 🚧</div>
 </div>
+
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+
+<!-- ═══ FIND POKU GAME ═══ -->
+<div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+<section id="game">
+  <div class="section-title" style="color: var(--yellow);">🎮 FIND POKU 🎮</div>
+
+  <div id="game-start-screen">
+    <p class="game-instructions">Poku is hiding among imposters. Find the REAL Poku.<br/>You have <strong>3 seconds</strong> per round. Rounds get harder. Poku gets sneakier.</p>
+    <button class="game-btn visible" onclick="startGame()">▶ START GAME</button>
+  </div>
+
+  <div id="game-play-screen" style="display:none;">
+    <div class="round-banner">ROUND <span id="round-num">1</span> &nbsp;—&nbsp; <span id="round-label">EASY</span></div>
+    <div class="game-hud">
+      <div class="game-hud-box">SCORE: <span id="score-num">0</span></div>
+      <div class="game-hud-box">LIVES: <span id="lives-num">❤️❤️❤️</span></div>
+      <div class="game-hud-box">TIME: <span id="timer-num">--</span></div>
+    </div>
+
+    <div class="game-target-wrap">
+      ★ FIND THIS POKU ★
+      <img id="target-img" src="" alt="Target Poku"/>
+    </div>
+
+    <div class="game-feedback" id="game-feedback"></div>
+    <div class="game-grid" id="game-grid"></div>
+    <button class="game-btn" id="next-btn" onclick="nextRound()">NEXT ROUND ▶</button>
+  </div>
+
+  <div class="game-over-screen" id="game-over-screen">
+    <h2 id="go-title">GAME OVER</h2>
+    <p id="go-message"></p>
+    <div class="final-score" id="go-score"></div>
+    <button class="game-btn visible" onclick="startGame()" style="margin-top:16px;">▶ PLAY AGAIN</button>
+  </div>
+</section>
 
 <div class="divider">✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
 
@@ -725,7 +1112,51 @@
   </div>
 </footer>
 
-<!-- ═══ GREETER POKU ═══ -->
+<!-- ═══ JACKPOT WIN OVERLAY ═══ -->
+<div id="jackpot-overlay">
+  <div id="jackpot-coins"></div>
+  <div class="jp-lights-row top">
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#2F63FA"></div>
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#63DE77"></div>
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#2F63FA"></div>
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#63DE77"></div>
+  </div>
+  <div class="jp-lights-row bottom">
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#63DE77"></div>
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#2F63FA"></div>
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#63DE77"></div>
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#2F63FA"></div>
+  </div>
+  <div class="jp-lights-col left">
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#63DE77"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#2F63FA"></div>
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#63DE77"></div>
+  </div>
+  <div class="jp-lights-col right">
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#F3C734"></div>
+    <div class="jp-light" data-col="#63DE77"></div><div class="jp-light" data-col="#2F63FA"></div>
+    <div class="jp-light" data-col="#F3C734"></div><div class="jp-light" data-col="#63DE77"></div>
+    <div class="jp-light" data-col="#2F63FA"></div><div class="jp-light" data-col="#F3C734"></div>
+  </div>
+
+  <div class="jp-content">
+    <div class="jp-title">🎰 JACKPOT 🎰</div>
+    <div class="jp-subtitle">HENLO COINS SECURED</div>
+    <img src="poku-briefcase.png" class="jp-poku" alt="Poku"/>
+    <div class="jp-banner">🪙 POKU FOUND ALL ROUNDS 🪙</div>
+    <div class="jp-score" id="jackpot-score">0 PTS</div>
+    <div class="jp-rank" id="jp-rank-text">★ ASCENDED BERA SPOTTER ★</div>
+    <div class="jp-msg">poku says henlo. poku says ooga booga.<br/>poku is proud of u.</div>
+    <button class="jp-btn" onclick="window.location.href='https://www.cia.gov/'">🐾 COLLECT WINNINGS 🐾</button>
+  </div>
+</div>
+
+
 <div class="greeter">
   <div class="greeter-bubbles">
     <div class="henlo-bubble b1">henlo...</div>
@@ -764,7 +1195,28 @@
   localStorage.setItem('poku_visits', visits);
   document.getElementById('visit-num').textContent = String(visits).padStart(6, '0');
 
-  // ── GUESTBOOK ──
+  // ── SIGHTING REPORTS (localStorage) ──
+  const SIGHTING_KEY = 'poku_sightings';
+
+  function loadSightings() {
+    const entries = JSON.parse(localStorage.getItem(SIGHTING_KEY) || '[]');
+    const container = document.getElementById('guestbook-entries');
+    container.innerHTML = '';
+    if (entries.length === 0) {
+      container.innerHTML = '<p style="font-family:\'Special Elite\',serif;color:var(--grey);font-size:13px;text-align:center;padding:20px;">No sightings filed yet. Be the first.</p>';
+      return;
+    }
+    entries.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'guest-entry';
+      div.innerHTML = `
+        <div class="guest-name">${escHtml(e.name)} ${e.emoji}</div>
+        <div class="guest-date">📅 ${e.date}</div>
+        <div class="guest-msg">${escHtml(e.msg)}</div>`;
+      container.appendChild(div);
+    });
+  }
+
   function signGuestbook() {
     const name = document.getElementById('gb-name').value.trim();
     const msg  = document.getElementById('gb-msg').value.trim();
@@ -773,18 +1225,23 @@
     const date = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
     const emojis = ['⚡','🌟','👾','🐾','✨','🔥','💫','🌙'];
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-    const entry = document.createElement('div');
-    entry.className = 'guest-entry';
-    entry.innerHTML = `
-      <div class="guest-name">${escHtml(name)} ${emoji}</div>
-      <div class="guest-date">📅 ${date}</div>
-      <div class="guest-msg">${escHtml(msg)}</div>`;
-    document.getElementById('guestbook-entries').prepend(entry);
+    const existing = JSON.parse(localStorage.getItem(SIGHTING_KEY) || '[]');
+    existing.unshift({ name, msg, date, emoji });
+    // Keep max 50 entries
+    if (existing.length > 50) existing.length = 50;
+    localStorage.setItem(SIGHTING_KEY, JSON.stringify(existing));
     document.getElementById('gb-name').value = '';
     document.getElementById('gb-msg').value = '';
-    entry.style.border = '2px solid var(--yellow)';
-    setTimeout(() => entry.style.border = '2px solid var(--grey)', 2000);
+    loadSightings();
+    // Flash newest entry
+    const first = document.getElementById('guestbook-entries').firstElementChild;
+    if (first) {
+      first.style.border = '2px solid var(--yellow)';
+      setTimeout(() => first.style.border = '2px solid var(--grey)', 2000);
+    }
   }
+
+  loadSightings();
 
   function escHtml(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1008,6 +1465,228 @@
     requestAnimationFrame(animate);
   }
   animate();
+
+  // ── FIND POKU GAME ──
+  const REAL_POKUS = [
+    'poku.png','poku-wave.png','poku-flamethrower.png','poku-helmet.png',
+    'poku-firehead.png','poku-fireeyes.png','poku-matches.png',
+    'poku-chef.png','poku-sitting-fire.png','poku-briefcase.png',
+  ];
+  const FAKE_FILTERS = [
+    'hue-rotate(120deg) saturate(2)','hue-rotate(200deg) saturate(1.5)',
+    'hue-rotate(300deg) saturate(3)','grayscale(1) contrast(1.5)',
+    'sepia(1) saturate(3)','invert(0.7)','hue-rotate(60deg) brightness(1.4)',
+    'saturate(0.1) brightness(0.7)','hue-rotate(180deg) contrast(2)',
+    'invert(0.4) hue-rotate(90deg)','brightness(2) saturate(0.2)',
+    'hue-rotate(240deg) brightness(0.8)',
+  ];
+  const ROUNDS = [
+    { label:'EASY',       displayNum:'1',   cols:3, total:6,  timeLimit:3, fakeStrength:0.3  },
+    { label:'NORMAL',     displayNum:'2',   cols:4, total:9,  timeLimit:3, fakeStrength:0.55 },
+    { label:'TRICKY',     displayNum:'3',   cols:4, total:12, timeLimit:3, fakeStrength:0.72 },
+    { label:'HARD',       displayNum:'4',   cols:5, total:16, timeLimit:3, fakeStrength:0.85 },
+    { label:'HENLO???',   displayNum:'5',   cols:5, total:20, timeLimit:3, fakeStrength:0.93 },
+    { label:'OOGA BOOGA', displayNum:'6',   cols:6, total:24, timeLimit:3, fakeStrength:0.97 },
+    { label:'ARE U EVEN SEEDING', displayNum:'6.9', cols:6, total:25, timeLimit:3, fakeStrength:0.99 },
+  ];
+  let gameState = {};
+  let timerInterval = null;
+
+  function startGame() {
+    gameState = { round:0, score:0, lives:3 };
+    document.getElementById('game-start-screen').style.display = 'none';
+    document.getElementById('game-over-screen').classList.remove('visible');
+    document.getElementById('game-play-screen').style.display = 'block';
+    loadRound();
+  }
+
+  function loadRound() {
+    clearInterval(timerInterval);
+    const r = ROUNDS[gameState.round];
+    document.getElementById('round-num').textContent = r.displayNum;
+    document.getElementById('round-label').textContent = r.label;
+    document.getElementById('score-num').textContent = gameState.score;
+    document.getElementById('lives-num').textContent = '❤️'.repeat(gameState.lives);
+    document.getElementById('game-feedback').textContent = '';
+    document.getElementById('game-feedback').className = 'game-feedback';
+    document.getElementById('next-btn').classList.remove('visible');
+    document.querySelector('.game-grid').style.setProperty('--game-cols', r.cols);
+
+    const target = REAL_POKUS[Math.floor(Math.random() * REAL_POKUS.length)];
+    gameState.target = target;
+    document.getElementById('target-img').src = target;
+
+    const correctIdx = Math.floor(Math.random() * r.total);
+    const cards = [];
+    for (let i = 0; i < r.total; i++) {
+      if (i === correctIdx) {
+        cards.push({ src:target, isReal:true, filter:'none', transform:'' });
+      } else {
+        const useSameImg = Math.random() < r.fakeStrength;
+        const fakeSrc = useSameImg
+          ? target
+          : REAL_POKUS.filter(p => p !== target)[Math.floor(Math.random() * (REAL_POKUS.length - 1))];
+        const fakeFilter = FAKE_FILTERS[Math.floor(Math.random() * FAKE_FILTERS.length)];
+        let transform = '';
+        if (gameState.round >= 2) {
+          const s = [0.85,0.9,1.05,1.1][Math.floor(Math.random()*4)];
+          transform = `scale(${s})`;
+        }
+        if (gameState.round >= 3) {
+          const flips = ['scaleX(-1)','scaleY(-1)','rotate(180deg)','rotate(90deg)',''];
+          transform += ' ' + flips[Math.floor(Math.random()*flips.length)];
+        }
+        cards.push({ src:fakeSrc, isReal:false, filter:fakeFilter, transform:transform.trim() });
+      }
+    }
+    gameState.correctIdx = correctIdx;
+    gameState.answered = false;
+
+    const grid = document.getElementById('game-grid');
+    grid.innerHTML = '';
+    cards.forEach((card, i) => {
+      const div = document.createElement('div');
+      div.className = 'game-card';
+      const img = document.createElement('img');
+      img.src = card.src;
+      img.style.filter = card.filter;
+      if (card.transform) img.style.transform = card.transform;
+      div.appendChild(img);
+      div.addEventListener('click', () => handlePick(i, card.isReal, div));
+      grid.appendChild(div);
+    });
+
+    if (r.timeLimit > 0) {
+      let t = r.timeLimit;
+      const timerEl = document.getElementById('timer-num');
+      timerEl.textContent = t + 's';
+      timerEl.style.color = 'var(--yellow)';
+      timerInterval = setInterval(() => {
+        t--;
+        timerEl.textContent = t + 's';
+        timerEl.style.color = t <= 3 ? '#ff4444' : 'var(--yellow)';
+        if (t <= 0) { clearInterval(timerInterval); if (!gameState.answered) handleTimeout(); }
+      }, 1000);
+    } else {
+      document.getElementById('timer-num').textContent = '∞';
+    }
+  }
+
+  function handlePick(idx, isReal, div) {
+    if (gameState.answered) return;
+    gameState.answered = true;
+    clearInterval(timerInterval);
+    const grid = document.getElementById('game-grid');
+    if (isReal) {
+      div.classList.add('correct');
+      const pts = getAngelNumber(gameState.round);
+      gameState.score += pts;
+      document.getElementById('score-num').textContent = gameState.score;
+      setFeedback(`✓ +${pts} ✨ henlo 🐾`, 'good');
+    } else {
+      div.classList.add('wrong');
+      grid.children[gameState.correctIdx].classList.add('correct');
+      gameState.lives--;
+      document.getElementById('lives-num').textContent = '❤️'.repeat(Math.max(0, gameState.lives));
+      const taunts = ['NOT POKU. ooga booga.','WRONG BERA.','that is not henlo.','poku is disappointed.'];
+      setFeedback(taunts[Math.floor(Math.random()*taunts.length)], 'bad');
+    }
+    advanceGame();
+  }
+
+  function handleTimeout() {
+    gameState.answered = true;
+    document.getElementById('game-grid').children[gameState.correctIdx].classList.add('correct');
+    gameState.lives--;
+    document.getElementById('lives-num').textContent = '❤️'.repeat(Math.max(0,gameState.lives));
+    setFeedback('TOO SLOW. poku escaped.', 'bad');
+    advanceGame();
+  }
+
+  function setFeedback(msg, cls) {
+    const el = document.getElementById('game-feedback');
+    el.textContent = msg;
+    el.className = 'game-feedback ' + cls;
+  }
+
+  function advanceGame() {
+    if (gameState.lives <= 0) { setTimeout(() => endGame(false), 1300); return; }
+    if (gameState.round >= ROUNDS.length - 1) { setTimeout(() => endGame(true), 1300); return; }
+    document.getElementById('next-btn').classList.add('visible');
+  }
+
+  // Angel numbers awarded per round
+  const ROUND_POINTS = [111, 222, 333, 420, 444, 555, 666];
+
+  function nextRound() { gameState.round++; loadRound(); }
+
+  function getAngelNumber(roundIdx) {
+    return ROUND_POINTS[roundIdx] || 111;
+  }
+
+  function endGame(won) {
+    clearInterval(timerInterval);
+    document.getElementById('game-play-screen').style.display = 'none';
+    if (won) {
+      triggerJackpot();
+    } else {
+      const screen = document.getElementById('game-over-screen');
+      screen.classList.add('visible');
+      const rank = gameState.score >= 2751 ? '★ ASCENDED BERA SPOTTER ★'
+                 : gameState.score >= 1500 ? '✓ SEASONED INVESTIGATOR'
+                 : gameState.score >= 666  ? '~ AMATEUR HENLO HUNTER'
+                 :                           '✗ COULD NOT SPOT A BERA';
+      document.getElementById('go-title').textContent = 'POKU GOT AWAY';
+      document.getElementById('go-message').textContent = `You ran out of lives. Poku is still out there.\n\nRank: ${rank}`;
+      document.getElementById('go-score').textContent = gameState.score + ' PTS';
+    }
+  }
+
+  function triggerJackpot() {
+    const overlay = document.getElementById('jackpot-overlay');
+    overlay.classList.add('active');
+    const scoreEl = document.getElementById('jackpot-score');
+    scoreEl.textContent = gameState.score + ' PTS';
+    const rank = gameState.score >= 2751 ? '★ ASCENDED BERA SPOTTER ★'
+               : gameState.score >= 1500 ? '✓ SEASONED INVESTIGATOR'
+               : gameState.score >= 666  ? '~ AMATEUR HENLO HUNTER'
+               :                           '✗ COULD NOT SPOT A BERA';
+    document.getElementById('jp-rank-text').textContent = rank;
+
+    // Spawn coins
+    const coinArea = document.getElementById('jackpot-coins');
+    coinArea.innerHTML = '';
+    const coinSymbols = ['🪙','💛','⭐','💰','🐾','✨','💫','🌟'];
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('div');
+      c.className = 'jp-coin';
+      c.textContent = coinSymbols[Math.floor(Math.random()*coinSymbols.length)];
+      c.style.left = Math.random()*100 + 'vw';
+      c.style.animationDuration = (Math.random()*2 + 1) + 's';
+      c.style.animationDelay = (Math.random()*2) + 's';
+      c.style.fontSize = (Math.random()*24+16) + 'px';
+      coinArea.appendChild(c);
+    }
+
+    // Flash lights
+    let flash = 0;
+    const lights = document.querySelectorAll('.jp-light');
+    const flashIv = setInterval(() => {
+      lights.forEach((l,i) => {
+        l.style.background = (flash + i) % 2 === 0 ? l.dataset.col : '#111';
+      });
+      flash++;
+    }, 180);
+    overlay.dataset.flashIv = flashIv;
+  }
+
+  function closeJackpot() {
+    clearInterval(parseInt(document.getElementById('jackpot-overlay').dataset.flashIv));
+    document.getElementById('jackpot-overlay').classList.remove('active');
+    document.getElementById('game-start-screen').style.display = 'block';
+    gameState = {};
+  }
+
   const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let konamiIdx = 0;
   document.addEventListener('keydown', (e) => {
